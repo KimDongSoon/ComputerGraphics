@@ -115,13 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Handle.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScnMgr.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h" />
-    <ClInclude Include="handle.h" />
+    <ClInclude Include="Handle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScnMgr.h" />
   </ItemGroup>

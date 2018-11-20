@@ -3,7 +3,7 @@
 #include "Global.h"
 #include "Player.h"
 #include "ScnMgr.h"
-#include "handle.h"
+#include "Handle.h"
 
 using namespace std;
 
@@ -11,16 +11,22 @@ GLvoid drawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Timer(int);
 GLvoid KeyBoard(unsigned char, int, int);
-GLvoid Mouse(int button, int state, int x, int y);
-GLvoid Motion(int x, int y);
-void KeyDownInput(unsigned char key, int x, int y);
+//void KeyDownInput(unsigned char key, int x, int y);
 void KeyUpInput(unsigned char key, int x, int y);
+void Motion(int x, int y);
+void Mouse(int button, int state, int x, int y);
+
 
 ScnMgr* g_ScnMgr = NULL;
+Handle g_Handle;
 
 // 전역변수
 int g_Gear = 0;
 bool g_Accel = false;
+bool g_angle = false;
+
+bool chk_left_button = false;
+int Handle_x = 0, Handle_y = 0;
 
 void main(int argc, char *argv[])
 {   //초기화 함수들	
@@ -32,13 +38,13 @@ void main(int argc, char *argv[])
 
 	g_ScnMgr = new ScnMgr();
 
-	glutMouseFunc(Mouse);
-	glutMotionFunc(Motion);
 	glutDisplayFunc(drawScene);    // 출력 함수의 지정   
 	glutKeyboardFunc(KeyBoard);
 	glutKeyboardUpFunc(KeyUpInput);
 	//glutKeyboardFunc(KeyDownBoard);
-	glutTimerFunc(TIME, Timer, 1);
+	glutMouseFunc(Mouse);
+	glutMotionFunc(Motion);
+	glutTimerFunc(100, Timer, 1);
 	glutReshapeFunc(Reshape);   // 다시 그리기 함수의 지정 
 	glutMainLoop();
 }
@@ -55,8 +61,11 @@ GLvoid KeyBoard(unsigned char key, int x, int y)
 		break;
 	case 'w':				// 일단 엑셀
 		g_Accel = true;
-	
 		break;
+	case 'z':
+		g_angle = true;
+		break;
+
 	}
 }
 
@@ -72,6 +81,7 @@ GLvoid KeyBoard(unsigned char key, int x, int y)
 //	//RenderScene();
 //}
 //
+
 void KeyUpInput(unsigned char key, int x, int y)
 {
 	//g_ScnMgr->KeyInput(key, x, y);
@@ -80,16 +90,62 @@ void KeyUpInput(unsigned char key, int x, int y)
 		g_Accel = false;
 	}
 
-	
+	if (key == 'z') {
+		g_angle = false;
+	}
+
+
 	//RenderScene();
 }
 
 
-GLvoid Timer(int value)
+GLvoid Timer(int v)
 {
-	glutTimerFunc(TIME, Timer, 1);
+	glutTimerFunc(100, Timer, 1);
 }
 
+void Mouse(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		chk_left_button = true;
+		Handle_x = x, Handle_y = y;
+		g_Handle.m_Check_Collision_between_handle_and_Mouse(x, y);
+	}
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+	{
+		chk_left_button = false;
+	}
+}
+
+void Motion(int x, int y)
+{
+	float angle_of_rotation = 0;
+	int cur_x = x;
+
+	if (chk_left_button)
+	{
+		if (Handle_x > x)
+		{
+			angle_of_rotation = -(Handle_x - x) / 4;
+			g_Handle.m_Rotate_Steering_Handle(angle_of_rotation);
+			if (cur_x <= x)
+			{
+				Handle_x = cur_x;
+			}
+		}
+		else
+		{
+			angle_of_rotation = -(Handle_x - x) / 4;
+			g_Handle.m_Rotate_Steering_Handle(angle_of_rotation);
+			if (cur_x >= x)
+			{
+				Handle_x = cur_x;
+			}
+		}
+		cout << "x : " << x << "\t cur_x :" << cur_x << "\t Handle_x : " << Handle_x << endl;
+	}
+}
 // 윈도우 출력 함수 
 GLvoid drawScene(GLvoid)
 {
@@ -101,32 +157,17 @@ GLvoid drawScene(GLvoid)
 	glutPostRedisplay();
 	glutSwapBuffers();// 화면에 출력하기
 }
-GLvoid Mouse(int button, int state, int x, int y)
-{
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		;
-	}
-}
-GLvoid Motion(int x, int y)
-{
-
-}
-
 
 GLvoid Reshape(int w, int h)
 {
 	glViewport(0, 0, w, h);
 
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	gluPerspective(60.f, 800/800, 1.0f, 1000.0f);
+	gluPerspective(60, 1, 1, 1000);
 	glTranslatef(0.f, 0.f, -400.f);
-	//glRotatef(50, 0.f, 1.f, 0.f);
+	glRotatef(0.f, 0.f, 1.f, 0.f);
 	//glOrtho(-400.f, 400.f, -300.f, 300.f, -400.f, 400.f);
 
+	glMatrixMode(GL_PROJECTION);
+
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 }
