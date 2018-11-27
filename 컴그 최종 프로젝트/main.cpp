@@ -32,9 +32,10 @@ void main(int argc, char *argv[])
 {   //초기화 함수들	
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);  // 디스플레이 모드 설정 
-	glutInitWindowPosition(100, 50);   // 윈도우의 위치지정 
-	glutInitWindowSize(800, 600);    // 윈도우의 크기 지정
-	glutCreateWindow("주차게임");   // 윈도우 생성 (윈도우 이름) 
+	glutInitWindowPosition(100, 50);	 // 윈도우의 위치지정 
+	glutInitWindowSize(800, 600);		 // 윈도우의 크기 지정
+	glEnable(GL_DEPTH_TEST);			 // 조명 on
+	glutCreateWindow("주차게임");		 // 윈도우 생성 (윈도우 이름) 
 
 	g_ScnMgr = new ScnMgr();
 
@@ -42,8 +43,8 @@ void main(int argc, char *argv[])
 	glutKeyboardFunc(KeyBoard);
 	glutKeyboardUpFunc(KeyUpInput);
 	//glutKeyboardFunc(KeyDownBoard);
-	glutMouseFunc(Mouse);
-	glutMotionFunc(Motion);
+	//glutMouseFunc(Mouse);
+	//glutMotionFunc(Motion);
 	glutTimerFunc(100, Timer, 1);
 	glutReshapeFunc(Reshape);   // 다시 그리기 함수의 지정 
 	glutMainLoop();
@@ -149,7 +150,7 @@ void Motion(int x, int y)
 // 윈도우 출력 함수 
 GLvoid drawScene(GLvoid)
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);   // 바탕색을 'black' 로 지정  
+	glClearColor(0.0f, 1.0f, 1.0f, 0.0f);   // 바탕색을 'black' 로 지정  
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   // 설정된 색으로 전체를 칠하기    
 
 	g_ScnMgr->RenderScene();
@@ -164,7 +165,7 @@ GLvoid Reshape(int w, int h)
 
 	gluPerspective(60, 1, 1, 1000);
 	glTranslatef(0.f, 0.f, -400.f);
-	glRotatef(0.f, 0.f, 1.f, 0.f);
+	glRotatef(30.f, 1.f, 0.f, 0.f);
 	//glOrtho(-400.f, 400.f, -300.f, 300.f, -400.f, 400.f);
 
 	glMatrixMode(GL_PROJECTION);
