@@ -10,10 +10,6 @@ class Player {
 	float carY = 0.f;
 	float carZ = 0.f;
 
-	float dirX = 0.f;			// 바라보고 있는 방향
-	float dirY = 0.f;			// Y 불필요
-	float dirZ = 0.f;
-
 	float left_FrontWheel = 0.f;
 	float right_FrontWheel = 0.f;
 
@@ -21,11 +17,6 @@ class Player {
 public:
 	void setCarPosition(float x, float y, float z);
 	void getCarPosition(float* x, float* y, float* z);
-
-	void setCarDir(float x, float y, float z);
-	void getCarDir(float* x, float* y, float* z);
-
-	void RotationY(float y);
 
 	void setAcc(float x);
 

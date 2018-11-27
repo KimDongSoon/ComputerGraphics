@@ -14,35 +14,13 @@ void Player::getCarPosition(float * x, float * y, float * z)
 	*z = carZ;
 }
 
-void Player::setCarDir(float x, float y, float z)
-{
-	dirX = x;
-	dirY = y;		// ÇÊ¿ä x
-	dirZ = z;
-}
-
-void Player::getCarDir(float * x, float * y, float * z)
-{
-	*x = dirX;
-	*y = dirY;		// ÇÊ¿ä x
-	*z = dirZ;
-}
-
-void Player::RotationY(float y)
-{
-	float radians = (y * 3.1415f) / 180.f;
-
-	dirX = (cos(radians) * 1) + sin(radians) * 0;		// x y z ¹Ù²ãÁà¾ß ´ï!	y´Â °è¼Ó 0!
-	dirY = 0;
-	dirZ = (-sin(radians) * 1) + cos(radians) * 0;
-}
-
 void Player::Update()
 {
 	carX = 0.f;
 	carY = 0.f;
 	carZ = 0.f;
 }
+
 
 void createCylinder(GLfloat centerx, GLfloat centery, GLfloat centerz, GLfloat radius, GLfloat h)		// ¹ÙÄû
 {
