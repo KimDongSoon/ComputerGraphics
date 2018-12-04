@@ -30,6 +30,7 @@ void Player::getCarDir(float * x, float * y, float * z)
 
 void Player::RotationY(float y)
 {
+	RotY = y;
 	float radians = (y * 3.1415f) / 180.f;
 
 	dirX = (cos(radians) * 1) + sin(radians) * 0;		// x y z ¹Ù²ãÁà¾ß ´ï!	y´Â °è¼Ó 0!

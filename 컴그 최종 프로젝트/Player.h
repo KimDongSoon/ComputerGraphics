@@ -17,6 +17,8 @@ class Player {
 	float left_FrontWheel = 0.f;
 	float right_FrontWheel = 0.f;
 
+	float RotY = -90.f;
+
 
 public:
 	void setCarPosition(float x, float y, float z);
@@ -26,6 +28,7 @@ public:
 	void getCarDir(float* x, float* y, float* z);
 
 	void RotationY(float y);
+	float GetRotY() { return RotY; }
 
 	void setAcc(float x);
 

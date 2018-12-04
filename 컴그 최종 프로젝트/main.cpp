@@ -24,9 +24,14 @@ Handle g_Handle;
 int g_Gear = 0;
 bool g_Accel = false;
 bool g_angle = false;
+bool mouse_Swit = false;
 
-bool chk_left_button = false;
+//bool chk_left_button = false;
+bool left_button = false;
+
+
 int Handle_x = 0, Handle_y = 0;
+int mouse_X = 0, mouse_Y = 0;
 
 void main(int argc, char *argv[])
 {   //초기화 함수들	
@@ -43,8 +48,8 @@ void main(int argc, char *argv[])
 	glutKeyboardFunc(KeyBoard);
 	glutKeyboardUpFunc(KeyUpInput);
 	//glutKeyboardFunc(KeyDownBoard);
-	//glutMouseFunc(Mouse);
-	//glutMotionFunc(Motion);
+	glutMouseFunc(Mouse);
+	glutMotionFunc(Motion);
 	glutTimerFunc(100, Timer, 1);
 	glutReshapeFunc(Reshape);   // 다시 그리기 함수의 지정 
 	glutMainLoop();
@@ -107,21 +112,28 @@ GLvoid Timer(int v)
 
 void Mouse(int button, int state, int x, int y)
 {
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		chk_left_button = true;
-		Handle_x = x, Handle_y = y;
-		g_Handle.m_Check_Collision_between_handle_and_Mouse(x, y);
-	}
-	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-	{
-		chk_left_button = false;
+	//if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	//{
+	//	chk_left_button = true;
+	//	Handle_x = x, Handle_y = y;
+	//	g_Handle.m_Check_Collision_between_handle_and_Mouse(x, y);
+	//}
+	//else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+	//{
+	//	chk_left_button = false;
+	//}
+
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		left_button = true;
+		mouse_X = x;	mouse_Y = 300 - y;								// y값 음수 양수에 따라 수정
+		g_ScnMgr->GetPrevX() = x;
+		//cout << mouse_X << ", " << mouse_Y << endl;						// 찍어보기
 	}
 }
-
+//
 void Motion(int x, int y)
 {
-	float angle_of_rotation = 0;
+	/*float angle_of_rotation = 0;
 	int cur_x = x;
 
 	if (chk_left_button)
@@ -145,12 +157,16 @@ void Motion(int x, int y)
 			}
 		}
 		cout << "x : " << x << "\t cur_x :" << cur_x << "\t Handle_x : " << Handle_x << endl;
+	}*/
+
+	if (left_button == true) {
+		g_ScnMgr->Motion(x, y);
 	}
 }
 // 윈도우 출력 함수 
 GLvoid drawScene(GLvoid)
 {
-	glClearColor(0.0f, 1.0f, 1.0f, 0.0f);   // 바탕색을 'black' 로 지정  
+	glClearColor(0.0f, 1.0f, 1.0f, 0.0f);   // 바탕색을 지정  
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   // 설정된 색으로 전체를 칠하기    
 
 	g_ScnMgr->RenderScene();

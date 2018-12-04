@@ -17,8 +17,8 @@ private:
 
 public:
 
-
-	void m_Draw_handle();
+	void Make_Handle();
+	void m_Draw_handle(float y);
 	void m_Check_Collision_between_handle_and_Mouse(int x, int y);
 	void m_Rotate_Steering_Handle(float angle);
 };

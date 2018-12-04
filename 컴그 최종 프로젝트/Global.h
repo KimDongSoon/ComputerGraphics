@@ -10,4 +10,6 @@ extern bool g_Accel;	// ø¢ºø¿Ã æ»¥≠∑»¿ª∂ß
 
 extern bool g_angle;
 
+extern bool mouse_Swit;
+
 extern Handle g_Handle;

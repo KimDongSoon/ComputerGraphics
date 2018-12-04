@@ -9,7 +9,10 @@
 GLubyte* pBytes;
 BITMAPINFO *info;
 GLuint textureID;
+
 //unsigned int textureID;
+
+Handle* handle = new Handle;
 
 void createCylinder(GLfloat centerx, GLfloat centery, GLfloat centerz, GLfloat radius, GLfloat h);
 GLubyte * LoadDIBitmap(const char *filename, BITMAPINFO **info);
@@ -19,6 +22,8 @@ ScnMgr::ScnMgr()
 	m_Player = new Player();
 	float x = 0.f, y = 0.f, z = 0.f;		//차의 초기 위치
 	m_Player->setCarPosition(x, y, z);
+
+	handle->Make_Handle();
 
 	//g_Handle.m_Draw_handle();
 
@@ -53,16 +58,16 @@ void ScnMgr::RenderScene()
 	glBindTexture(GL_TEXTURE_2D,textureID);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.f, 1.f);
-	glVertex3f(-400, 0, 1000);
+	glVertex3f(-400, 0, 800);
 
 	glTexCoord2f(0.f, 0.f);
-	glVertex3f(-400, 0, -1000);
+	glVertex3f(-400, 0, -800);
 
 	glTexCoord2f(1.f, 0.f);
-	glVertex3f(400, 0, -1000);
+	glVertex3f(400, 0, -800);
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex3f(400, 0, 1000);
+	glVertex3f(400, 0, 800);
 	glEnd();
 	//glPopMatrix();
 
@@ -101,6 +106,8 @@ void ScnMgr::RenderScene()
 	
 	glPushMatrix();
 
+
+
 	//GLfloat specref[] = { 1.0f,1.0f,1.0f,1.0f };
 	//glEnable(GL_LIGHTING);
 	//glMateriali(GL_FRONT, GL_SHININESS, 64);
@@ -108,7 +115,7 @@ void ScnMgr::RenderScene()
 
 		glColor4f(1.f, 1.f, 0.f, 1.f);
 		glTranslated(x,y,z);
-		//glScalef(1.f, 0.5f, 1.f);		// 삭제해야 될 수도
+		glScalef(2.f, 2.0f, 1.f);		// 삭제해야 될 수도
 
 		if (g_angle) {						// 밑에 Translate 밑에
 			//glTranslated(x, y, z);
@@ -120,8 +127,9 @@ void ScnMgr::RenderScene()
 			cout << "Angle = " << angle << endl;
 		}
 
-		glRotatef(angle, 0, 1, 0);
-		m_Player->RotationY(angle);
+		float playerAngle = m_Player->GetRotY();
+		glRotatef(playerAngle, 0, 1, 0);
+		//m_Player->RotationY(angle);
 
 		// 자동차 윗면
 		//glutWireCube(carSize);	
@@ -164,6 +172,7 @@ void ScnMgr::RenderScene()
 		//	gluCylinder(pQuad, 10.0, 10.0, 30.0, 20, 8);*/
 		//glPopMatrix();
 
+
 		//////////////////////////////////////////////////////////////////////////////////////
 		glBegin(GL_POLYGON);
 		glColor3f(1.0, 1.0, 1.0);
@@ -175,7 +184,7 @@ void ScnMgr::RenderScene()
 		glEnd();
 
 
-		glBegin(GL_POLYGON);
+		glBegin(GL_POLYGON);					// 뒤 밑
 		glColor3f(1.0, 1.0, 1.0);
 		glVertex3f(40.0f, 0.0f, -15.0f);
 		glVertex3f(40.0f, 0.0f, 15.0f);
@@ -183,7 +192,7 @@ void ScnMgr::RenderScene()
 		glVertex3f(40.0f, -15.0f, -15.0f);
 		glEnd();
 		glBegin(GL_POLYGON);
-		glColor3f(1.0, 1.0, 1.0);
+		glColor3f(1.0, 1.0, 1.0);				// 앞 밑
 		glVertex3f(-40.0f, 0.0f, -15.0f);
 		glVertex3f(-40.0f, 0.0f, 15.0f);
 		glVertex3f(-40.0f, -15.0f, 15.0f);
@@ -279,16 +288,31 @@ void ScnMgr::RenderScene()
 		//glRotatef(45,0,0,1);
 		glScalef(10, 0.3, 3);
 
-		glutWireCube(-20);
+		//glutWireCube(-20);
 
 
 		glPopMatrix();
 		//////////////////////////////////////////////////////////////////////////////////////
 	glPopMatrix();
-
+	
+	
+	handle->m_Draw_handle(playerAngle);
 
 }
 
+void ScnMgr::Motion(int x, int y) {
+
+	scnMgr_mouseX = x, scnMgr_mouseY = 300 - y;
+
+	float playerRotY = m_Player->GetRotY();
+
+	m_Player->RotationY(playerRotY + (scnMgr_mouseX - prevX));
+
+	prevX = x;
+
+
+	cout << scnMgr_mouseX << ", " << scnMgr_mouseY << endl;
+}
 
 GLubyte * LoadDIBitmap(const char *filename, BITMAPINFO **info)
 {
